@@ -9,6 +9,10 @@ from keras.applications import vgg19
 from keras import backend as K
 import pandas as pd 
 import yaml
+import tensorflow as tf
+
+tf.compat.v1.disable_eager_execution()
+
 
 parser = argparse.ArgumentParser(description='Neural style transfer with Keras.')
 parser.add_argument('base_image_path', metavar='base', type=str,
