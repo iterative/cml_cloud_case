@@ -16,7 +16,7 @@ jobs:
         run: |
           echo "Deploying..."
           RUNNER_LABELS="cml,aws"
-          RUNNER_REPO="https://github.com/andronovhopf/style"
+          RUNNER_REPO="https://github.com/iterative/cml_cloud_case"
           MACHINE="cml$(date +%s)"
           docker-machine create \
             --driver amazonec2 \
