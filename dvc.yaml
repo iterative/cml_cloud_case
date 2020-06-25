@@ -1,6 +1,6 @@
 stages:
   transfer:
-    cmd: python neural_style_transfer.py imgs/owl_photo.jpg imgs/georgia_okeefe.jpg
+    cmd: python neural_style_transfer.py imgs/owl_photo.jpg imgs/georgia_nature_forms.jpg
       results/owl
     deps:
     - imgs
