@@ -1,0 +1,17 @@
+stages:
+  transfer:
+    cmd: python neural_style_transfer.py imgs/owl_photo.jpg imgs/georgia_okeefe.jpg
+      results/owl
+    deps:
+    - imgs
+    params:
+    - content_weight
+    - iter
+    - style_weight
+    - tv_weight
+    outs:
+    - final_owl.png:
+        cache: false
+    - gpu_info.txt:
+        cache: false
+    

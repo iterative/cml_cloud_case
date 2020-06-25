@@ -1,0 +1,7 @@
+tensorflow-gpu
+keras
+pillow
+pandas
+tabulate
+nvgpu
+dvc
