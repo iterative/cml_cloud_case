@@ -51,7 +51,7 @@ jobs:
 
       - name: cml_run
         env:
-          repo_token: ${{ secrets.GITHUB_TOKEN}}
+          repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
           apt-get update -y
           apt-get install python3-dev -y
