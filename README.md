@@ -15,7 +15,7 @@ This example uses AWS EC2 instances. The workflow is compatible with Azure compu
 ```yaml
 deploy-gce-gpu:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-cloud-runner
+    container: docker://dvcorg/cml:latest
 
     steps:
       - name: deploy
@@ -60,7 +60,7 @@ deploy-gce-gpu:
             -e RUNNER_LABELS=$RUNNER_LABELS \
             -e RUNNER_REPO=$RUNNER_REPO \
             -e RUNNER_IDLE_TIMEOUT=120 \
-            docker://dvcorg/cml-gpu-py3-cloud-runner && \
+            docker://dvcorg/cml-py3 && \
           sleep 20 && echo "Deployed $MACHINE"
           ) || (docker-machine rm -f $MACHINE && exit 1)
 ```
