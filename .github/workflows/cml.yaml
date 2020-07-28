@@ -5,7 +5,7 @@ on: [push]
 jobs:
   deploy-cloud-runner:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml:latest
+    container: docker://dvcorg/cml
 
     steps:
       - name: deploy
@@ -39,7 +39,7 @@ jobs:
             -e RUNNER_LABELS=$RUNNER_LABELS \
             -e RUNNER_REPO=$RUNNER_REPO \
             -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-py3:latest && \
+            dvcorg/cml-py3 && \
           sleep 20 && echo "Deployed $MACHINE"
           ) || (docker-machine rm -y -f $MACHINE && exit 1)
   train:
