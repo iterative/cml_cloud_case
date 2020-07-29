@@ -28,7 +28,7 @@ jobs:
             --amazonec2-region us-east-2 \
             --amazonec2-zone a \
             --amazonec2-ssh-user ubuntu \
-            --amazonec2-ami ami-07b11e59bc74961b5 \
+            --amazonec2-ami ami-08bf49c7b3a0c761e5 \
             --amazonec2-root-size 64 \
             $MACHINE && \
 
@@ -43,7 +43,7 @@ jobs:
             -e RUNNER_LABELS=$RUNNER_LABELS \
             -e RUNNER_REPO=$RUNNER_REPO \
             -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-gpu-py3-cloud-runner:latest && \
+            dvcorg/cml-py3:latest && \
           sleep 20 && echo "Deployed $MACHINE"
           ) || (docker-machine rm -y -f $MACHINE && exit 1)
   train:
