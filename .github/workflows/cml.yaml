@@ -5,7 +5,7 @@ on: [push]
 jobs:
   deploy-cloud-runner:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-gpu-cloud-runner
+    container: docker://dvcorg/cml
 
     steps:
       - name: deploy
@@ -13,23 +13,27 @@ jobs:
           repo_token: ${{ secrets.REPO_TOKEN }} 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         run: |
           echo "Deploying..."
           RUNNER_LABELS="cml,aws"
           RUNNER_REPO="https://github.com/iterative/cml_cloud_case"
           MACHINE="cml$(date +%s)"
+          
+          (
           docker-machine create \
             --driver amazonec2 \
             --amazonec2-instance-type g3s.xlarge \
             --amazonec2-vpc-id vpc-76f1f01e \
             --amazonec2-region us-east-2 \
-            --amazonec2-zone a \
+            --amazonec2-zone b \
             --amazonec2-ssh-user ubuntu \
             --amazonec2-ami ami-07b11e59bc74961b5 \
             --amazonec2-root-size 64 \
-            $MACHINE
-          eval "$(docker-machine env --shell sh $MACHINE)"
-          (
+            $MACHINE && \
+
+          eval "$(docker-machine env --shell sh $MACHINE)" && \
+        
           docker-machine ssh $MACHINE "sudo mkdir -p /docker_machine && sudo chmod 777 /docker_machine" && \
           docker-machine scp -r -q ~/.docker/machine/ $MACHINE:/docker_machine && \
           docker run --name runner --gpus all -d \
@@ -39,7 +43,7 @@ jobs:
             -e RUNNER_LABELS=$RUNNER_LABELS \
             -e RUNNER_REPO=$RUNNER_REPO \
             -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-gpu-py3-cloud-runner:latest && \
+            dvcorg/cml-py3:latest && \
           sleep 20 && echo "Deployed $MACHINE"
           ) || (docker-machine rm -y -f $MACHINE && exit 1)
   train:
