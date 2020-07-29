@@ -28,7 +28,7 @@ jobs:
             --amazonec2-region us-east-2 \
             --amazonec2-zone a \
             --amazonec2-ssh-user ubuntu \
-            --amazonec2-ami ami-08bf49c7b3a0c761e5 \
+            --amazonec2-ami ami-07b11e59bc74961b5 \
             --amazonec2-root-size 64 \
             $MACHINE && \
 
