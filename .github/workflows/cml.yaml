@@ -19,6 +19,8 @@ jobs:
           RUNNER_LABELS="cml,aws"
           RUNNER_REPO="https://github.com/iterative/cml_cloud_case"
           MACHINE="cml$(date +%s)"
+          
+          (
           docker-machine create \
             --driver amazonec2 \
             --amazonec2-instance-type g3s.xlarge \
@@ -28,9 +30,10 @@ jobs:
             --amazonec2-ssh-user ubuntu \
             --amazonec2-ami ami-07b11e59bc74961b5 \
             --amazonec2-root-size 64 \
-            $MACHINE
-          eval "$(docker-machine env --shell sh $MACHINE)"
-          (
+            $MACHINE && \
+
+          eval "$(docker-machine env --shell sh $MACHINE)" && \
+        
           docker-machine ssh $MACHINE "sudo mkdir -p /docker_machine && sudo chmod 777 /docker_machine" && \
           docker-machine scp -r -q ~/.docker/machine/ $MACHINE:/docker_machine && \
           docker run --name runner --gpus all -d \
@@ -40,7 +43,7 @@ jobs:
             -e RUNNER_LABELS=$RUNNER_LABELS \
             -e RUNNER_REPO=$RUNNER_REPO \
             -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-py3 && \
+            dvcorg/cml-gpu-py3-cloud-runner:latest && \
           sleep 20 && echo "Deployed $MACHINE"
           ) || (docker-machine rm -y -f $MACHINE && exit 1)
   train:
