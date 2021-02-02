@@ -27,7 +27,7 @@ jobs:
   train:
     needs: deploy-runner
     runs-on: [self-hosted,cml-runner-gpu]
-    container: tensorflow/tensorflow:latest-gpu
+    container: dvcorg/cml-py3
     
     steps:
       - uses: actions/checkout@v2
@@ -38,14 +38,12 @@ jobs:
 
       - uses: iterative/setup-cml@v1
 
-      - uses: iterative/setup-dvc@v1
-
       - name: cml_run
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
           apt-get update -y
-          apt install imagemagick git -y
+          apt install imagemagick -y
           pip install -r requirements.txt
           
           # DVC stuff
