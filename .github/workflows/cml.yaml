@@ -27,7 +27,9 @@ jobs:
   train:
     needs: deploy-runner
     runs-on: [self-hosted,cml-runner-gpu]
-    container: dvcorg/cml-py3
+    container:
+      image: dvcorg/cml-py3
+      options: --gpus all
     
     steps:
       - uses: actions/checkout@v2
