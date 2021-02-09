@@ -3,58 +3,48 @@ name: style-transfer
 on: [push]
 
 jobs:
-  deploy-cloud-runner:
+  deploy-runner:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-gpu-cloud-runner
 
     steps:
+      - uses: actions/checkout@v2
+
+      - uses: iterative/setup-cml@v1
+
       - name: deploy
         env:
           repo_token: ${{ secrets.REPO_TOKEN }} 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          echo "Deploying..."
-          RUNNER_LABELS="cml,aws"
-          RUNNER_REPO="https://github.com/iterative/cml_cloud_case"
-          MACHINE="cml$(date +%s)"
-          docker-machine create \
-            --driver amazonec2 \
-            --amazonec2-instance-type g3s.xlarge \
-            --amazonec2-vpc-id vpc-76f1f01e \
-            --amazonec2-region us-east-2 \
-            --amazonec2-zone a \
-            --amazonec2-ssh-user ubuntu \
-            --amazonec2-ami ami-07b11e59bc74961b5 \
-            --amazonec2-root-size 64 \
-            $MACHINE
-          eval "$(docker-machine env --shell sh $MACHINE)"
-          (
-          docker-machine ssh $MACHINE "sudo mkdir -p /docker_machine && sudo chmod 777 /docker_machine" && \
-          docker-machine scp -r -q ~/.docker/machine/ $MACHINE:/docker_machine && \
-          docker run --name runner --gpus all -d \
-            -v /docker_machine/machine:/root/.docker/machine \
-            -e DOCKER_MACHINE=$MACHINE \
-            -e repo_token=$repo_token \
-            -e RUNNER_LABELS=$RUNNER_LABELS \
-            -e RUNNER_REPO=$RUNNER_REPO \
-            -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-gpu-py3-cloud-runner:latest && \
-          sleep 20 && echo "Deployed $MACHINE"
-          ) || (docker-machine rm -y -f $MACHINE && exit 1)
+          cml-runner \
+            --cloud aws \
+            --cloud-region us-west  \
+            --cloud-type g3s.xlarge \
+            --cloud-spot \
+            --labels=cml-runner-gpu
+          
   train:
-    needs: deploy-cloud-runner
-    runs-on: [self-hosted,cml]
+    needs: deploy-runner
+    runs-on: [self-hosted,cml-runner-gpu]
+    container:
+      image: dvcorg/cml-py3
+      options: --gpus all
     
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+
+      - uses: iterative/setup-cml@v1
 
       - name: cml_run
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
           apt-get update -y
-          apt-get install python3-dev -y
           apt install imagemagick -y
           pip install -r requirements.txt
           
