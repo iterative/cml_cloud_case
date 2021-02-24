@@ -24,7 +24,9 @@ jobs:
   train:
     needs: deploy-cloud-runner
     runs-on: [self-hosted,cml-runner]
-    container: docker://dvcorg/cml-py3
+    container: 
+      image: docker://dvcorg/cml-py3
+      options: --gpus all
     steps:
       - uses: actions/checkout@v2
       - name: "Train style transfer model"
