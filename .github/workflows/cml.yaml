@@ -5,55 +5,31 @@ on: [push]
 jobs:
   deploy-cloud-runner:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml
-
     steps:
-      - name: deploy
+      - uses: iterative/setup-cml@v1
+      - uses: actions/checkout@v2
+      - name: "Deploy GPU"
         env:
           repo_token: ${{ secrets.REPO_TOKEN }} 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         run: |
-          echo "Deploying..."
-          RUNNER_LABELS="cml,aws"
-          RUNNER_REPO="https://github.com/iterative/cml_cloud_case"
-          MACHINE="cml$(date +%s)"
-          
-          (
-          docker-machine create \
-            --driver amazonec2 \
-            --amazonec2-instance-type g3s.xlarge \
-            --amazonec2-vpc-id vpc-76f1f01e \
-            --amazonec2-region us-east-2 \
-            --amazonec2-zone b \
-            --amazonec2-ssh-user ubuntu \
-            --amazonec2-ami ami-07b11e59bc74961b5 \
-            --amazonec2-root-size 64 \
-            $MACHINE && \
-
-          eval "$(docker-machine env --shell sh $MACHINE)" && \
-        
-          docker-machine ssh $MACHINE "sudo mkdir -p /docker_machine && sudo chmod 777 /docker_machine" && \
-          docker-machine scp -r -q ~/.docker/machine/ $MACHINE:/docker_machine && \
-          docker run --name runner --gpus all -d \
-            -v /docker_machine/machine:/root/.docker/machine \
-            -e DOCKER_MACHINE=$MACHINE \
-            -e repo_token=$repo_token \
-            -e RUNNER_LABELS=$RUNNER_LABELS \
-            -e RUNNER_REPO=$RUNNER_REPO \
-            -e RUNNER_IDLE_TIMEOUT=120 \
-            dvcorg/cml-py3:latest && \
-          sleep 20 && echo "Deployed $MACHINE"
-          ) || (docker-machine rm -y -f $MACHINE && exit 1)
+          cml-runner \
+          --cloud aws \
+          --cloud-region us-east-2 \
+          --cloud-type=p2.xlarge \
+          --cloud-hdd-size 64 \
+          --labels=cml-runner
   train:
     needs: deploy-cloud-runner
-    runs-on: [self-hosted,cml]
-    
+    runs-on: [self-hosted,cml-runner]
+    container: 
+      image: docker://dvcorg/cml-py3
+      options: --gpus all
     steps:
       - uses: actions/checkout@v2
-
-      - name: cml_run
+      - name: "Train style transfer model"
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
@@ -70,7 +46,7 @@ jobs:
           git show origin/master:final_owl.png > master_owl.png
           convert +append final_owl.png master_owl.png out.png
           convert out.png -resize 75%  out_shrink.png
-          echo "### Workspace vs. Master" >> report.md
+          echo "### Workspace vs. Main" >> report.md
           cml-publish out_shrink.png --md --title 'compare' >> report.md
           
           echo "## Training metrics" >> report.md
