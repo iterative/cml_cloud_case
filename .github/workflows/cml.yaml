@@ -23,7 +23,7 @@ jobs:
           --labels=cml-runner
   train:
     needs: deploy-cloud-runner
-    runs-on: [self-hosted,cml]
+    runs-on: [self-hosted,cml-runner]
     container: docker://dvcorg/cml-py3
     steps:
       - uses: actions/checkout@v2
