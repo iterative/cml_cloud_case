@@ -8,6 +8,8 @@ jobs:
     container: docker://dvcorg/cml
 
     steps:
+      - uses: iterative/setup-cml@v1
+      - uses: actions/checkout@v2
       - name: "Deploy GPU"
         env:
           repo_token: ${{ secrets.REPO_TOKEN }} 
