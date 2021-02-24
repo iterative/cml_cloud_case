@@ -24,10 +24,9 @@ jobs:
   train:
     needs: deploy-cloud-runner
     runs-on: [self-hosted,cml]
-    
+    container: docker://dvcorg/cml-py3
     steps:
       - uses: actions/checkout@v2
-
       - name: "Train style transfer model"
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
