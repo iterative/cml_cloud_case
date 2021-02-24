@@ -5,8 +5,6 @@ on: [push]
 jobs:
   deploy-cloud-runner:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml
-
     steps:
       - uses: iterative/setup-cml@v1
       - uses: actions/checkout@v2
