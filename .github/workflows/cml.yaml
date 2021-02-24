@@ -33,4 +33,27 @@ jobs:
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
-          nvidia-smi
+          apt-get update -y
+          apt-get install python3-dev -y
+          apt install imagemagick -y
+          pip install -r requirements.txt
+          
+          # DVC stuff
+          git fetch --prune
+          dvc repro
+          
+          echo "# Style transfer" >> report.md
+          git show origin/master:final_owl.png > master_owl.png
+          convert +append final_owl.png master_owl.png out.png
+          convert out.png -resize 75%  out_shrink.png
+          echo "### Workspace vs. Main" >> report.md
+          cml-publish out_shrink.png --md --title 'compare' >> report.md
+          
+          echo "## Training metrics" >> report.md
+          dvc params diff master --show-md >> report.md
+          
+          echo >> report.md
+          echo "## GPU info" >> report.md
+          cat gpu_info.txt >> report.md
+          
+          cml-send-comment report.md 
