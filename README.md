@@ -9,3 +9,5 @@ This repository contains a sample project using [CML](https://github.com/iterati
 
 The key file enabling these actions is `.github/workflows/cml.yaml`.
 
+## Variables
+You must create a [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with repository and workflow privileges to supply as a secret, in addition to your AWS credentials (`AWS_ACCESS_KEY_ID`,`AWS_SECRET_ACCESS_KEY`, and optinoally `AWS_SESSION_TOKEN`).
