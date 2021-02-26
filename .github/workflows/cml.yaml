@@ -13,12 +13,11 @@ jobs:
           repo_token: ${{ secrets.REPO_TOKEN }} 
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         run: |
           cml-runner \
           --cloud aws \
           --cloud-region us-east-2 \
-          --cloud-type=p2.xlarge \
+          --cloud-type=g3s.xlarge \
           --cloud-hdd-size 64 \
           --labels=cml-runner
   train:
