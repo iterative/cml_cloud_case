@@ -17,7 +17,7 @@ jobs:
           cml-runner \
           --cloud aws \
           --cloud-region us-west \
-          --cloud-type=g3s.xlarge \
+          --cloud-type=g3.xlarge \
           --cloud-hdd-size 64 \
           --labels=cml-runner
   train:
