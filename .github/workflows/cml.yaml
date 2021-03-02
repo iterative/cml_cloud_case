@@ -1,13 +1,15 @@
-name: style-transfer
+name: train-my-model
 
 on: [push]
 
 jobs:
-  deploy-cloud-runner:
+  deploy-runner:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: iterative/setup-cml@v1
       - uses: actions/checkout@v2
+
+      - uses: iterative/setup-cml@v1
+
       - name: "Deploy GPU"
         env:
           repo_token: ${{ secrets.REPO_TOKEN }} 
@@ -20,15 +22,22 @@ jobs:
           --cloud-type=g3.4xlarge \
           --cloud-hdd-size 64 \
           --labels=cml-runner
-  train:
-    needs: deploy-cloud-runner
+
+  run:
+    needs: deploy-runner
     runs-on: [self-hosted,cml-runner]
     container: 
-      image: docker://dvcorg/cml-py3
+      image: docker://dvcorg/cml
       options: --gpus all
+      
     steps:
       - uses: actions/checkout@v2
-      - name: "Train style transfer model"
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.6'
+
+      - name: cml
         env:
           repo_token: ${{ secrets.REPO_TOKEN}}
         run: |
