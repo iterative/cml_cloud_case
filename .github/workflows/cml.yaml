@@ -24,7 +24,6 @@ jobs:
           --cloud-hdd-size 64 \
           --labels=cml-runner
 
-
   run:
     needs: deploy-runner
     runs-on: [self-hosted,cml-runner]
@@ -41,7 +40,7 @@ jobs:
 
     - name: cml
       env:
-        repo_token: ${ secrets.PERSONAL_ACCESS_TOKEN }
+        repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         apt-get update -y
         apt install imagemagick -y
