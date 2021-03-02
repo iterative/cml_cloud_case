@@ -13,15 +13,14 @@ jobs:
       - name: deploy
         shell: bash
         env:
-          repo_token: ${ secrets.PERSONAL_ACCESS_TOKEN }
-          AWS_ACCESS_KEY_ID: ${ secrets.AWS_ACCESS_KEY_ID }
-          AWS_SECRET_ACCESS_KEY: ${ secrets.AWS_SECRET_ACCESS_KEY }
+          repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           cml-runner \
           --cloud aws \
           --cloud-region us-west \
-          --cloud-type=g3.4xlarge \
-          --cloud-hdd-size 64 \
+          --cloud-type=t2.micro \
           --labels=cml-runner
 
 
