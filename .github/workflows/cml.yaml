@@ -18,11 +18,12 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           cml-runner \
-          --cloud aws \
-          --cloud-region us-west \
-          --cloud-type=g3.4xlarge \
-          --cloud-hdd-size 64 \
-          --labels=cml-runner
+          --cloud-spot \
+          --cloud azure \
+          --cloud-region eastus \
+          --cloud-type Standard_NC6 \
+          --idle-timeout 1800 \
+          --labels cml-runner
 
   run:
     needs: deploy-runner
