@@ -13,16 +13,17 @@ jobs:
       - name: deploy
         shell: bash
         env:
-          repo_token: ${ secrets.REPO_TOKEN }
+          repo_token: ${ secrets.PERSONAL_ACCESS_TOKEN }
           AWS_ACCESS_KEY_ID: ${ secrets.AWS_ACCESS_KEY_ID }
           AWS_SECRET_ACCESS_KEY: ${ secrets.AWS_SECRET_ACCESS_KEY }
         run: |
           cml-runner \
-            --cloud aws \
-            --cloud-region us-west \
-            --cloud-type=g3.4xlarge \
-            --cloud-hdd-size 64 \
-            --labels=cml-runner
+          --cloud aws \
+          --cloud-region us-west \
+          --cloud-type=g3.4xlarge \
+          --cloud-hdd-size 64 \
+          --labels=cml-runner
+
 
   run:
     needs: deploy-runner
@@ -40,7 +41,7 @@ jobs:
 
     - name: cml
       env:
-        repo_token: ${ secrets.REPO_TOKEN }
+        repo_token: ${ secrets.PERSONAL_ACCESS_TOKEN }
       run: |
         apt-get update -y
         apt install imagemagick -y
