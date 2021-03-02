@@ -44,4 +44,6 @@ jobs:
       env:
         repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
-        apt-get update -y
+        echo "## Training metrics" >> report.md
+      
+        cml-send-comment report.md 
