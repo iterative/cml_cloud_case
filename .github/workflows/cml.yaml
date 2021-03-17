@@ -28,7 +28,7 @@ jobs:
     needs: deploy-runner
     runs-on: [self-hosted,cml-runner]
     container: 
-      image: docker://dvcorg/cml
+      image: docker://davidgortega/cml:runner
       options: --gpus all
 
     steps:
