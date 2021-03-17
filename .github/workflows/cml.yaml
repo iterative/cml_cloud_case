@@ -5,10 +5,11 @@ on: [push]
 jobs:
   deploy-runner:
     runs-on: [ubuntu-latest]
+    container: 
+      image: docker://davidgortega/cml:runner
+      
     steps:
       - uses: actions/checkout@v2
-
-      - uses: iterative/setup-cml@v1
 
       - name: deploy
         shell: bash
