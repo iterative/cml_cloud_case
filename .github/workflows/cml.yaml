@@ -25,6 +25,8 @@ jobs:
           --labels=cml-runner \
           --reuse
 
+          echo 'should reuse'
+
   run:
     needs: deploy-runner
     runs-on: [self-hosted,cml-runner]
