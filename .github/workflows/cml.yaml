@@ -22,7 +22,8 @@ jobs:
           --cloud-region us-west \
           --cloud-type=g3.4xlarge \
           --cloud-hdd-size 64 \
-          --labels=cml-runner
+          --labels=cml-runner \
+          --reuse
 
   run:
     needs: deploy-runner
