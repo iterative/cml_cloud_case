@@ -7,7 +7,7 @@ jobs:
     runs-on: [ubuntu-latest]
     container: 
       image: docker://davidgortega/cml:runner
-      
+
     steps:
       - uses: actions/checkout@v2
 
@@ -17,6 +17,7 @@ jobs:
           repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SSH_PRIVATE: ${{ secrets.SSH_PRIVATE }}
         run: |
           cml-runner \
           --cloud aws \
@@ -24,9 +25,9 @@ jobs:
           --cloud-type=g3.4xlarge \
           --cloud-hdd-size 64 \
           --labels=cml-runner \
-          --reuse
-
-          echo 'should reuse'
+          --ssh-private=${{ secrets.SSH_PRIVATE }} \
+          --idle-timeout=600 \
+          --cloud-startup-script=c3VkbyBlY2hvICdoZWxsbyB3b3JsZCcgPj4gL3Vzci9oZWxsby50eHQ=
 
   run:
     needs: deploy-runner
