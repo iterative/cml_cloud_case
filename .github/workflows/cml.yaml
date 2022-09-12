@@ -13,7 +13,7 @@ jobs:
       - name: deploy
         shell: bash
         env:
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           cml runner \
           --repo="$REPOSITORY_URL" \
