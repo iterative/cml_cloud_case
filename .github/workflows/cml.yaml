@@ -12,14 +12,10 @@ jobs:
 
       - name: deploy
         shell: bash
-        env:
-          repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        
         run: |
           cml runner \
           --repo="$REPOSITORY_URL" \
-          --token="$PERSONAL_ACCESS_TOKEN" \
           --labels="local,runner" \
           --idle-timeout=180
           
