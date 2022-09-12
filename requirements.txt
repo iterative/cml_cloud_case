@@ -1,5 +1,5 @@
 tensorflow-gpu==2.2.2
-keras
+keras==2.3.1
 pillow
 pandas
 tabulate
