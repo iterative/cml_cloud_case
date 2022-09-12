@@ -12,17 +12,18 @@ jobs:
 
       - name: deploy
         shell: bash
-        
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           cml runner \
           --repo="$REPOSITORY_URL" \
           --labels="local,runner" \
-          --idle-timeout=180 \
-          --token="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"
+          --idle-timeout=180 
+          
           
   run:
     needs: deploy-runner
-    runs-on: [self-hosted,cml-runner]
+    runs-on: self-hosted
     container: 
       image: docker://iterativeai/cml
       options: --gpus all
@@ -41,7 +42,7 @@ jobs:
         apt-get update -y
         apt install imagemagick -y
         pip install -r requirements.txt
-        
+        git config --global --add safe.directory /__w/cml_cloud_case_neural_stt_local_cicd_test/cml_cloud_case_neural_stt_local_cicd_test
         # DVC stuff
         git fetch --prune
         dvc repro
