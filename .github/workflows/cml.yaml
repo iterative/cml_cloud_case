@@ -17,7 +17,8 @@ jobs:
           cml runner \
           --repo="$REPOSITORY_URL" \
           --labels="local,runner" \
-          --idle-timeout=180
+          --idle-timeout=180 \
+          --token="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"
           
   run:
     needs: deploy-runner
