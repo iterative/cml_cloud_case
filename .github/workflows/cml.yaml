@@ -12,11 +12,11 @@ jobs:
 
       - name: deploy
         shell: bash
-        
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cml runner \
           --repo="$REPOSITORY_URL" \
-          --token="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" \
           --labels="local,runner" \
           --idle-timeout=180 
           
