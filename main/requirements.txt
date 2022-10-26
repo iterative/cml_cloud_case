@@ -1,0 +1,7 @@
+tensorflow-gpu==2.2.2
+keras
+pillow
+pandas
+tabulate
+nvgpu
+dvc

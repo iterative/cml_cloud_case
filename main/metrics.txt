@@ -1,0 +1,5 @@
+| Metric       |        Value |
+|:-------------|-------------:|
+| Iterations   |  0           |
+| Run time (s) | 49.8537      |
+| Final loss   |  2.62031e+10 |

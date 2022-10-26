@@ -1,0 +1,15 @@
+transfer:
+  cmd: python neural_style_transfer.py imgs/owl_photo.jpg imgs/georgia_okeefe.jpg
+    results/owl
+  deps:
+  - path: imgs
+    md5: ae79bcc8a88e962400402d20d4976e89.dir
+  params:
+    params.yaml:
+      content_weight: 0.025
+      iter: 1
+      style_weight: 10.0
+      tv_weight: 1.0
+  outs:
+  - path: final_owl.png
+    md5: 9997e951f45a7459e825216fc17c38ce
